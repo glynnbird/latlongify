@@ -3,6 +3,7 @@ const path = require('path')
 const countries = []
 const counties = []
 const states = []
+let ref = null
 
 // pre-load geo-json
 const loadCollection = async (arr, folder) => {
@@ -64,20 +65,18 @@ const findInCollection = async (collection, latitude, longitude) => {
 
 // find the country/country/state matching the supplied lat/long
 const find = async (latitude, longitude) => {
-  if (countries.length === 0) {
-    await loadCollection(countries, './countries')
-    await loadCollection(counties, './counties')
-    await loadCollection(states, './states')
+  if (!ref) {
+    ref = require('./ref.json')
   }
   if (typeof latitude !== 'number' || typeof longitude !== 'number') {
     throw new Error('Missing parameter: latitude, longitude')
   }
   let countryMatch, stateMatch, countyMatch
-  countryMatch = await findInCollection(countries, latitude, longitude)
+  countryMatch = await findInCollection(ref.countries, latitude, longitude)
   if (countryMatch && countryMatch.code === 'GBR') {
-    countyMatch = await findInCollection(counties, latitude, longitude)
+    countyMatch = await findInCollection(ref.counties, latitude, longitude)
   } else if (countryMatch && countryMatch.code === 'USA') {
-    stateMatch = await findInCollection(states, latitude, longitude)
+    stateMatch = await findInCollection(ref.states, latitude, longitude)
   }
   return { country: countryMatch, state: stateMatch, county: countyMatch }
 }
