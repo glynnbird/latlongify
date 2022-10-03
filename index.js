@@ -45,6 +45,22 @@ const findInCollection = async (collection, latitude, longitude) => {
   return null
 }
 
+const findNearest = (things, latitude, longitude) => {
+  let nearestThing = null
+  let nearestDistance = 100000000
+  for (thing of things) {
+    // bit of pythagoras
+    const dx = thing.lat - latitude
+    const dy = thing.long - longitude
+    const d = Math.sqrt(dx*dx + dy*dy)
+    if (d < nearestDistance) {
+      nearestDistance = d
+      nearestThing = thing
+    }
+  }
+  return nearestThing
+}
+
 // find the country/country/state matching the supplied lat/long
 const find = async (latitude, longitude) => {
   if (!ref) {
@@ -53,14 +69,15 @@ const find = async (latitude, longitude) => {
   if (typeof latitude !== 'number' || typeof longitude !== 'number') {
     throw new Error('Missing parameter: latitude, longitude')
   }
-  let countryMatch, stateMatch, countyMatch
+  let countryMatch, stateMatch, countyMatch, cityMatch
   countryMatch = await findInCollection(ref.countries, latitude, longitude)
   if (countryMatch && countryMatch.code === 'GBR') {
     countyMatch = await findInCollection(ref.counties, latitude, longitude)
+    cityMatch = findNearest(ref.cities, latitude, longitude)
   } else if (countryMatch && countryMatch.code === 'USA') {
     stateMatch = await findInCollection(ref.states, latitude, longitude)
   }
-  return { country: countryMatch, state: stateMatch, county: countyMatch }
+  return { country: countryMatch, state: stateMatch, county: countyMatch, city: cityMatch }
 }
 
 module.exports = {

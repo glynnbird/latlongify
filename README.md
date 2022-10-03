@@ -5,6 +5,7 @@ A simple utility to lookup a lat/long pair and tell you:
 - which country it is in
 - which UK county it is in (if in the UK)
 - which US state it is in (if in the USA)
+- the nearest UK town/city (if in the UK)
 
 ## Installation
 
@@ -21,7 +22,8 @@ console.log(r)
 // {
 //   country: { name: 'United Kingdom', code: 'GBR', group: 'Countries' },
 //   state: undefined,
-//   county: { name: 'Cambridgeshire', group: 'UK Counties' }
+//   county: { name: 'Cambridgeshire', group: 'UK Counties' },
+//   city: { name: 'Somersham', lat: 52.3823, long: 0.0006 }
 // }
 ```
 
