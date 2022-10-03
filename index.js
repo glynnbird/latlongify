@@ -1,23 +1,5 @@
-const fs = require('fs')
 const path = require('path')
-const countries = []
-const counties = []
-const states = []
 let ref = null
-
-// pre-load geo-json
-const loadCollection = async (arr, folder) => {
-  try {
-    const dir = fs.opendirSync(folder)
-    for await (const dirent of dir) {
-      const p = path.join(folder, dirent.name)
-      const c = await fs.readFileSync(p, {encoding: 'utf8'})
-      arr.push(JSON.parse(c))
-    }
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 const inside = function (point, vs) {
   // ray-casting algorithm based on
