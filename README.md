@@ -16,7 +16,7 @@ npm install --save latlongify
 ## Usage
 
 ```js
-const latlongify = require('latlongify')
+import * as latlongify from 'latlongify'
 const r = await latlongify.find(52.4226, 0.01) // latitude & longitude
 console.log(r)
 // {

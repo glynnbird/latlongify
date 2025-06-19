@@ -1,6 +1,7 @@
 {
   "name": "latlongify",
-  "version": "1.0.2",
+  "version": "2.0.0",
+  "type": "module",
   "description": "Calculate country/county/state from lat/long",
   "main": "index.js",
   "scripts": {

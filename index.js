@@ -1,4 +1,3 @@
-const path = require('path')
 let ref = null
 
 const inside = function (point, vs) {
@@ -48,7 +47,7 @@ const findInCollection = async (collection, latitude, longitude) => {
 const findNearest = (things, latitude, longitude) => {
   let nearestThing = null
   let nearestDistance = 100000000
-  for (thing of things) {
+  for (let thing of things) {
     // bit of pythagoras
     const dx = thing.lat - latitude
     const dy = thing.long - longitude
@@ -62,9 +61,10 @@ const findNearest = (things, latitude, longitude) => {
 }
 
 // find the country/country/state matching the supplied lat/long
-const find = async (latitude, longitude) => {
+export async function find(latitude, longitude) {
   if (!ref) {
-    ref = require('./ref.json')
+    ref = await import("./ref.json", { with: { type: "json" } })
+    ref = ref.default
   }
   if (typeof latitude !== 'number' || typeof longitude !== 'number') {
     throw new Error('Missing parameter: latitude, longitude')
@@ -78,8 +78,4 @@ const find = async (latitude, longitude) => {
     stateMatch = await findInCollection(ref.states, latitude, longitude)
   }
   return { country: countryMatch, state: stateMatch, county: countyMatch, city: cityMatch }
-}
-
-module.exports = {
-  find
 }
